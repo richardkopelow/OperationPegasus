@@ -7,5 +7,4 @@ class Mission
 {
     public SolutionChecker Checker { get; set; }
     public int MissionNumber{ get; set; }
-    public int[] NextMissions { get; set; }
 }
