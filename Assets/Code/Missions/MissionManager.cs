@@ -39,6 +39,11 @@ class MissionManager:MonoBehaviour
         mis1.MissionNumber = 1;
         mis1.Checker = new Mission1Checker();
         Missions.Add(mis1);
+
+        Mission mis2 = new Mission();
+        mis2.MissionNumber = 2;
+        mis2.Checker = new Mission2Checker();
+        Missions.Add(mis2);
         #endregion
 
         CurrentMission = Missions[missionNumber];

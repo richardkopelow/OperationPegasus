@@ -1,0 +1,11 @@
+﻿public float Abs(float number);
+<i>Takes a float, return the absolute value</i>
+
+public int Truncate(float number);
+<i>Takes a float, return the number without the decimal place</i>
+
+public int Round(float number);
+<i>Takes a float, return the closest int (0.5 rounds up)</i>
+
+public bool IsPrime(int number);
+<i>Takes an integer and determines if it is prime.</i>
