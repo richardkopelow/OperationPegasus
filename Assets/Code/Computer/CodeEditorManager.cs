@@ -64,8 +64,8 @@ public class CodeEditorManager : MonoBehaviour
             TestBed tester = (TestBed)result.CreateInstance("Test");
             Console.Write("\n");
             tester.Run();
-            Console.NewPrompt();
         }
+        Console.NewPrompt();
     }
     public void OnSubmitClicked()
     {
@@ -75,6 +75,7 @@ public class CodeEditorManager : MonoBehaviour
         {
             MissionManager.Instance.CheckSolution(result);
         }
+        Console.NewPrompt();
     }
     public void OnDialogueOKClicked()
     {
@@ -98,6 +99,14 @@ public class CodeEditorManager : MonoBehaviour
     public void OnDialogueCancelClicked()
     {
         FileDialogue.SetActive(false);
+    }
+    public void OnDialogueTextChanged(string text)
+    {
+        if (text.Contains("\n"))
+        {
+            DialogueText.text = DialogueText.text.Substring(0, DialogueText.text.Length - 1);
+            OnDialogueOKClicked();
+        }
     }
     void showDialogue(bool saveAs)
     {
@@ -124,7 +133,7 @@ public class CodeEditorManager : MonoBehaviour
             Console.Write("\n");
             foreach (CompilerError error in results.Errors)
             {
-                Console.WriteLine(error.ToString());
+                Console.WriteLine(string.Format("Line {0} - {1}",error.Line,error.ErrorText));
             }
         }
 

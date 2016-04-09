@@ -45,7 +45,7 @@ public class ConsoleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int lines = (int)(((RectTransform)Output.transform).rect.height / (Output.fontSize+2));
+        int lines = (int)(((RectTransform)Output.transform).rect.height / (Output.fontSize+5));
         string[] outputLines = outputText.Split('\n');
         if (outputLines.Length > lines)
         {
