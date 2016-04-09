@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,10 @@ using System.IO;
 
 class MissionManager:MonoBehaviour
 {
+    public GameObject SpeechBox;
+    public Text SpeechText;
+    public AudioClip SpeechNoise;
+
     private static MissionManager _instance;
     public static MissionManager Instance
     {
@@ -22,6 +27,8 @@ class MissionManager:MonoBehaviour
     public List<Mission> Missions { get; set; }
 
     Manual missionManual;
+
+    bool speechClicked=false;
 
     void Start()
     {
@@ -52,34 +59,93 @@ class MissionManager:MonoBehaviour
         missionManual = GameObject.Find("MissionManual").GetComponent<Manual>();
         SetupMission();
     }
+    void LateUpdate()
+    {
+        speechClicked = false;
+    }
 
     public void CheckSolution(Assembly assembly)
     {
-        bool win=CurrentMission.Checker.CheckAnswer(assembly);
+        StartCoroutine(checkSolution(assembly));
+    }
+    IEnumerator checkSolution(Assembly assembly)
+    {
+        bool win = CurrentMission.Checker.CheckAnswer(assembly);
         if (win)
         {
+            yield return StartCoroutine(runSpeechScript(CurrentMission.MissionNumber,false));
             int nextMission = CurrentMission.MissionNumber + 1;
             PlayerPrefs.SetInt("CurrentMission", nextMission);
             CurrentMission = Missions[nextMission];
-
+            
             SetupMission();
+        }
+    }
+    IEnumerator runSpeechScript(int mission, bool start)
+    {
+        string path = Application.dataPath + "/StreamingAssets/Speech/" + mission;
+        if (start)
+        {
+            path += "/start.txt";
+        }
+        else
+        {
+            path += "/end.txt";
+        }
+        FileInfo fi = new FileInfo(path);
+        if (fi.Exists)
+        {
+            SpeechBox.SetActive(true);
+            using (StreamReader sr = new StreamReader(path))
+            {
+                string[] lines = sr.ReadToEnd().Replace("\r", "").Split('\n');
+                foreach (string line in lines)
+                {
+                    string[] splitRes = line.Split('~');
+                    char[] speechChars = splitRes[1].ToCharArray();
+
+                    string displayText = "";
+                    foreach (char c in speechChars)
+                    {
+                        displayText += c;
+                        SpeechText.text = string.Format("<color={0}>{1}</color>", splitRes[0], displayText);
+                        yield return new WaitForSeconds(0.05f);
+                    }
+                    while (!speechClicked)
+                    {
+                        yield return null;
+                    }
+                }
+            }
+            SpeechBox.SetActive(false);
         }
     }
 
     public void SetupMission()
     {
+        StartCoroutine(setupMission());
+    }
+    IEnumerator setupMission()
+    {
+        yield return StartCoroutine(runSpeechScript(CurrentMission.MissionNumber, true));
+
         missionManual.Populate("missions/" + CurrentMission.MissionNumber);
 
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath+"/StreamingAssets/MissionDocuments/"+CurrentMission.MissionNumber);
+        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + CurrentMission.MissionNumber);
         if (di.Exists)
         {
             foreach (FileInfo fi in di.GetFiles())
             {
                 if (!fi.Extension.Contains("meta"))
                 {
-                    fi.CopyTo(Application.dataPath + "/StreamingAssets/Drives/Q/Documents/"+fi.Name);
+                    fi.CopyTo(Application.dataPath + "/StreamingAssets/Drives/Q/Documents/" + fi.Name);
                 }
             }
         }
+    }
+
+    public void OnSpeechClicked()
+    {
+        speechClicked = true;
     }
 }

@@ -26,7 +26,7 @@ public class Mission2Checker : SolutionChecker
 
         MethodInfo method2 = adder.GetType().GetMethod("Round", new Type[] { typeof(float) });
         float number2 = UnityEngine.Random.Range(0f, 100f);
-        int rounded = (int)method.Invoke(adder, new object[] { number2 });
+        int rounded = (int)method2.Invoke(adder, new object[] { number2 });
         if (rounded != Math.Round(number2))
         {
             result = false;
@@ -36,7 +36,7 @@ public class Mission2Checker : SolutionChecker
         for (int i = 0; i < 40; i++)
         {
             int number3 = UnityEngine.Random.Range(0, 100);
-            bool prime = (bool)method.Invoke(adder, new object[] { number3 });
+            bool prime = (bool)method3.Invoke(adder, new object[] { number3 });
 
             bool isPrime = true;
             for (int j = 2; j < number; j++)

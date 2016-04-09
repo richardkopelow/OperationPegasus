@@ -104,7 +104,7 @@ public class CodeEditorManager : MonoBehaviour
     {
         if (text.Contains("\n"))
         {
-            DialogueText.text = DialogueText.text.Substring(0, DialogueText.text.Length - 1);
+            DialogueText.text = DialogueText.text.Replace("\n","");
             OnDialogueOKClicked();
         }
     }
