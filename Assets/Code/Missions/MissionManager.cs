@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Text;
 using System.IO;
 
-class MissionManager:MonoBehaviour
+public class MissionManager:MonoBehaviour
 {
     public GameObject SpeechBox;
     public Text SpeechText;
@@ -65,7 +65,6 @@ class MissionManager:MonoBehaviour
         GameObject manualGO = GameObject.Find("MissionManual");
         missionManualTrans = manualGO.GetComponent<Transform>();
         missionManual = manualGO.GetComponent<Manual>();
-        SetupMission();
     }
     void LateUpdate()
     {
