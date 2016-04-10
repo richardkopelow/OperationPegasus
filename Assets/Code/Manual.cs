@@ -13,6 +13,7 @@ public class Manual : MonoBehaviour
     public string ManualPath="";
 
     Transform trans;
+    AudioSource audioSource;
 
     List<string> pages;
     int currentPage;
@@ -24,6 +25,7 @@ public class Manual : MonoBehaviour
     void Start()
     {
         trans = GetComponent<Transform>();
+        audioSource = GetComponent<AudioSource>();
         startPosition = trans.position;
         focusPosition = GameObject.Find("ManualFocus").GetComponent<Transform>().position;
         if (ManualPath!="")
@@ -72,6 +74,7 @@ public class Manual : MonoBehaviour
     }
     public void OnNextClicked()
     {
+        audioSource.Play();
         currentPage += 2;
         Page1.text = pages[currentPage];
         if (currentPage + 1 < pages.Count)
@@ -89,6 +92,7 @@ public class Manual : MonoBehaviour
     }
     public void OnBackClicked()
     {
+        audioSource.Play();
         currentPage -= 2;
         Page1.text = pages[currentPage];
         if (currentPage + 1 < pages.Count)

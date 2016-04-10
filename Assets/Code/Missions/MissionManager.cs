@@ -12,7 +12,9 @@ class MissionManager:MonoBehaviour
 {
     public GameObject SpeechBox;
     public Text SpeechText;
-    public AudioClip SpeechNoise;
+    public AudioClip TeletypeAudio;
+    public AudioClip BeepAudio;
+    public AudioClip PneumaticAudio;
 
     private static MissionManager _instance;
     public static MissionManager Instance
@@ -26,6 +28,8 @@ class MissionManager:MonoBehaviour
     public Mission CurrentMission { get; set; }
     public List<Mission> Missions { get; set; }
 
+    AudioSource audioSource;
+    Transform missionManualTrans;
     Manual missionManual;
 
     bool speechClicked=false;
@@ -33,6 +37,8 @@ class MissionManager:MonoBehaviour
     void Start()
     {
         _instance = this;
+
+        audioSource = GetComponent<AudioSource>();
 
         int missionNumber = PlayerPrefs.GetInt("CurrentMission", 0);
         #region SetupMissions
@@ -56,7 +62,9 @@ class MissionManager:MonoBehaviour
 
         CurrentMission = Missions[missionNumber];
 
-        missionManual = GameObject.Find("MissionManual").GetComponent<Manual>();
+        GameObject manualGO = GameObject.Find("MissionManual");
+        missionManualTrans = manualGO.GetComponent<Transform>();
+        missionManual = manualGO.GetComponent<Manual>();
         SetupMission();
     }
     void LateUpdate()
@@ -73,6 +81,13 @@ class MissionManager:MonoBehaviour
         bool win = CurrentMission.Checker.CheckAnswer(assembly);
         if (win)
         {
+            audioSource.clip = BeepAudio;
+            audioSource.loop = false;
+            audioSource.Play();
+            while (audioSource.isPlaying)
+            {
+                yield return null;
+            }
             yield return StartCoroutine(runSpeechScript(CurrentMission.MissionNumber,false));
             int nextMission = CurrentMission.MissionNumber + 1;
             PlayerPrefs.SetInt("CurrentMission", nextMission);
@@ -104,13 +119,17 @@ class MissionManager:MonoBehaviour
                     string[] splitRes = line.Split('~');
                     char[] speechChars = splitRes[1].ToCharArray();
 
+                    audioSource.clip = TeletypeAudio;
+                    audioSource.loop = true;
+                    audioSource.Play();
                     string displayText = "";
                     foreach (char c in speechChars)
                     {
                         displayText += c;
                         SpeechText.text = string.Format("<color={0}>{1}</color>", splitRes[0], displayText);
-                        yield return new WaitForSeconds(0.05f);
+                        yield return new WaitForSeconds(0.025f);
                     }
+                    audioSource.Stop();
                     while (!speechClicked)
                     {
                         yield return null;
@@ -127,7 +146,15 @@ class MissionManager:MonoBehaviour
     }
     IEnumerator setupMission()
     {
+        audioSource.clip = BeepAudio;
+        audioSource.loop = false;
+        audioSource.Play();
+        while (audioSource.isPlaying)
+        {
+            yield return null;
+        }
         yield return StartCoroutine(runSpeechScript(CurrentMission.MissionNumber, true));
+        yield return StartCoroutine(runPneumatic());
 
         missionManual.Populate("missions/" + CurrentMission.MissionNumber);
 
@@ -141,6 +168,25 @@ class MissionManager:MonoBehaviour
                     fi.CopyTo(Application.dataPath + "/StreamingAssets/Drives/Q/Documents/" + fi.Name);
                 }
             }
+        }
+    }
+    IEnumerator runPneumatic()
+    {
+        audioSource.clip = PneumaticAudio;
+        audioSource.loop = false;
+        audioSource.Play();
+        Vector3 start = missionManualTrans.position;
+        Vector3 end = start + 5*Vector3.up;
+        for (int i = 0; i < 40; i++)
+        {
+            missionManualTrans.position = Vector3.Lerp(start, end, i / 40f);
+            yield return null;
+        }
+        yield return new WaitForSeconds(2);
+        for (int i = 0; i < 40; i++)
+        {
+            missionManualTrans.position = Vector3.Lerp(end, start, i / 40f);
+            yield return null;
         }
     }
 
