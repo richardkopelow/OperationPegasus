@@ -15,9 +15,9 @@ public class TitleScreen : MonoBehaviour
     IEnumerator enterGame()
     {
         Vector3 leftStart = new Vector3(-250,239, -348);
-        Vector3 leftEnd = leftStart + 400*Vector3.left;
+        Vector3 leftEnd = leftStart + 600*Vector3.left;
         Vector3 rightStart = new Vector3(250, 239, -348);
-        Vector3 rightEnd = rightStart + -400 * Vector3.left;
+        Vector3 rightEnd = rightStart + -600 * Vector3.left;
 
         Holder.SetActive(false);
 

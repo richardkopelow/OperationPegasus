@@ -25,8 +25,8 @@ public class MissionManager:MonoBehaviour
         }
     }
 
-    public Mission CurrentMission { get; set; }
-    public List<Mission> Missions { get; set; }
+    public List<Mission> CurrentMissions { get; set; }
+    public Dictionary<string, Mission> Missions { get; set; }
 
     AudioSource audioSource;
     Transform missionManualTrans;
@@ -39,28 +39,36 @@ public class MissionManager:MonoBehaviour
         _instance = this;
 
         audioSource = GetComponent<AudioSource>();
-
-        int missionNumber = PlayerPrefs.GetInt("CurrentMission", 0);
+        
         #region SetupMissions
-        Missions = new List<Mission>();
+        Missions = new Dictionary<string, Mission>();
 
-        Mission mis0 = new Mission();
-        mis0.MissionNumber = 0;
-        mis0.Checker = new Mission0Checker();
-        Missions.Add(mis0);
+        Mission addFives = new Mission("AddFives");
+        addFives.Checker = new Mission0Checker();
+        addFives.NextMissions.Add("Factorial");
+        Missions.Add(addFives.Name, addFives);
 
-        Mission mis1 = new Mission();
-        mis1.MissionNumber = 1;
-        mis1.Checker = new Mission1Checker();
-        Missions.Add(mis1);
+        Mission factorial = new Mission("Factorial");
+        factorial.Checker = new Mission1Checker();
+        factorial.NextMissions.Add("MathOps");
+        Missions.Add(factorial.Name, factorial);
 
-        Mission mis2 = new Mission();
-        mis2.MissionNumber = 2;
+        Mission mis2 = new Mission("MathOps");
         mis2.Checker = new Mission2Checker();
-        Missions.Add(mis2);
+        mis2.NextMissions.Add("");
+        Missions.Add(mis2.Name, mis2);
         #endregion
 
-        CurrentMission = Missions[missionNumber];
+        string missionsString = PlayerPrefs.GetString("CurrentMissions");
+        if (missionsString=="")
+        {
+            missionsString = "AddFives";
+        }
+        CurrentMissions = new List<Mission>();
+        foreach (string missionName in missionsString.Split(','))
+        {
+            CurrentMissions.Add(Missions[missionName]);
+        }
 
         GameObject manualGO = GameObject.Find("MissionManual");
         missionManualTrans = manualGO.GetComponent<Transform>();
@@ -77,25 +85,43 @@ public class MissionManager:MonoBehaviour
     }
     IEnumerator checkSolution(Assembly assembly)
     {
-        bool win = CurrentMission.Checker.CheckAnswer(assembly);
-        if (win)
+        List<Mission> missionsCompeted = new List<Mission>();
+        foreach (Mission mission in CurrentMissions)
         {
-            audioSource.clip = BeepAudio;
-            audioSource.loop = false;
-            audioSource.Play();
-            while (audioSource.isPlaying)
+            bool win = mission.Checker.CheckAnswer(assembly);
+            if (win)
             {
-                yield return null;
+                audioSource.clip = BeepAudio;
+                audioSource.loop = false;
+                audioSource.Play();
+                while (audioSource.isPlaying)
+                {
+                    yield return null;
+                }
+                yield return StartCoroutine(runSpeechScript(mission.Name, false));
+
+                missionsCompeted.Add(mission);
             }
-            yield return StartCoroutine(runSpeechScript(CurrentMission.MissionNumber,false));
-            int nextMission = CurrentMission.MissionNumber + 1;
-            PlayerPrefs.SetInt("CurrentMission", nextMission);
-            CurrentMission = Missions[nextMission];
-            
-            SetupMission();
         }
+        foreach (Mission mis in missionsCompeted)
+        {
+            CurrentMissions.Remove(mis);
+
+            foreach (string item in mis.NextMissions)
+            {
+                CurrentMissions.Add(Missions[item]);
+            }
+        }
+        string currentMissionsString = "";
+        foreach (Mission mission in CurrentMissions)
+        {
+            currentMissionsString += mission.Name + ",";
+        }
+        currentMissionsString = currentMissionsString.Substring(0, currentMissionsString.Length - 1);
+        PlayerPrefs.SetString("CurrentMissions", currentMissionsString);
+        SetupMission();
     }
-    IEnumerator runSpeechScript(int mission, bool start)
+    IEnumerator runSpeechScript(string mission, bool start)
     {
         string path = Application.dataPath + "/StreamingAssets/Speech/" + mission;
         if (start)
@@ -145,29 +171,45 @@ public class MissionManager:MonoBehaviour
     }
     IEnumerator setupMission()
     {
-        audioSource.clip = BeepAudio;
-        audioSource.loop = false;
-        audioSource.Play();
-        while (audioSource.isPlaying)
+        foreach (Mission mission in CurrentMissions)
         {
-            yield return null;
-        }
-        yield return StartCoroutine(runSpeechScript(CurrentMission.MissionNumber, true));
-        yield return StartCoroutine(runPneumatic());
-
-        missionManual.Populate("missions/" + CurrentMission.MissionNumber);
-
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + CurrentMission.MissionNumber);
-        if (di.Exists)
-        {
-            foreach (FileInfo fi in di.GetFiles())
+            if (!mission.Started)
             {
-                if (!fi.Extension.Contains("meta"))
+                audioSource.clip = BeepAudio;
+                audioSource.loop = false;
+                audioSource.Play();
+                while (audioSource.isPlaying)
                 {
-                    fi.CopyTo(Application.dataPath + "/StreamingAssets/Drives/Q/Documents/" + fi.Name);
+                    yield return null;
                 }
+                yield return StartCoroutine(runSpeechScript(mission.Name, true));
+
+                if (mission.NeedsManual)
+                {
+                    missionManual.Populate("missions/" + mission.Name);
+                }
+
+                DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + mission.Name);
+                if (di.Exists)
+                {
+                    foreach (FileInfo fi in di.GetFiles())
+                    {
+                        if (!fi.Extension.Contains("meta"))
+                        {
+                            try
+                            {
+                                fi.CopyTo(Application.dataPath + "/StreamingAssets/Drives/Q/Documents/" + fi.Name);
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+                }
+                mission.Started = true;
             }
         }
+        yield return StartCoroutine(runPneumatic());
     }
     IEnumerator runPneumatic()
     {

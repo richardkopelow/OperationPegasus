@@ -113,6 +113,7 @@ public class CodeEditorManager : MonoBehaviour
         saveAsDialogue = saveAs;
         DialogueText.text = openFilePath;
         FileDialogue.SetActive(true);
+        DialogueText.Select();
     }
     Assembly Compile()
     {
