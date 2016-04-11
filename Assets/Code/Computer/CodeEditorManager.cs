@@ -6,6 +6,7 @@ using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 
 public class CodeEditorManager : MonoBehaviour
 {
@@ -117,7 +118,11 @@ public class CodeEditorManager : MonoBehaviour
     }
     Assembly Compile()
     {
-        CSharpCodeProvider provider = new CSharpCodeProvider();
+        Dictionary<string, string> providerOptions = new Dictionary<string, string>
+                {
+                    {"CompilerVersion", "v2.0"}
+                };
+        CSharpCodeProvider provider = new CSharpCodeProvider(providerOptions);
 
         CompilerParameters compilerParams = new CompilerParameters();
         compilerParams.GenerateInMemory = true;
@@ -131,11 +136,14 @@ public class CodeEditorManager : MonoBehaviour
 
         if (results.Errors.Count > 0)
         {
+            Debug.Log("errors");
             Console.Write("\n");
             foreach (CompilerError error in results.Errors)
             {
+                Debug.Log(error);
                 Console.WriteLine(string.Format("Line {0} - {1}",error.Line,error.ErrorText));
             }
+            Debug.Log("end errors");
         }
 
         return results.CompiledAssembly;

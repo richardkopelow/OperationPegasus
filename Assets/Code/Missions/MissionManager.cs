@@ -226,11 +226,13 @@ public class MissionManager:MonoBehaviour
         }
         */
         yield return new WaitForSeconds(2);
+        /*
         for (int i = 0; i < 40; i++)
         {
             missionManualTrans.position = Vector3.Lerp(end, start, i / 40f);
             yield return null;
         }
+        */
     }
 
     public void OnSpeechClicked()
