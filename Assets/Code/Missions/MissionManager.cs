@@ -218,11 +218,13 @@ public class MissionManager:MonoBehaviour
         audioSource.Play();
         Vector3 start = missionManualTrans.position;
         Vector3 end = start + 5*Vector3.up;
+        /*
         for (int i = 0; i < 40; i++)
         {
             missionManualTrans.position = Vector3.Lerp(start, end, i / 40f);
             yield return null;
         }
+        */
         yield return new WaitForSeconds(2);
         for (int i = 0; i < 40; i++)
         {

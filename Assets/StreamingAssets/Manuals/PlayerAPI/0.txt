@@ -1,0 +1,17 @@
+﻿<size=20><b>Command Prompt</b></size>
+Here is a list of some helpful command
+
+dir
+<i>Lists all files and folders in directory.</i>
+
+cd [path]
+<i>Navigates working directory to supplied path</i>
+<i>i.e. cd documents</i>
+
+mkdir [name]
+<i>makes directory with given name.</i>
+<i>i.e. mkdir newFolder</i>
+
+copy [source] [destination]
+<i>Copies source file to destination.</i>
+<i>i.e. copy Example.cs NewProgram.cs</i>

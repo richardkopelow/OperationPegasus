@@ -29,3 +29,9 @@ sysinfo.txt
 *.apk
 *.unitypackage
 Assets/StreamingAssets/Drives/Q/Documents/
+Assets/Plugins/3DConnexionWrapperU4.bundle/Contents.meta
+Assets/Plugins/3DConnexionWrapperU4.bundle/
+Assets/SpaceNavigator/Changelog.txt
+Assets/SpaceNavigator/
+Assets/SpaceNavigator.meta
+Assets/Plugins/3DConnexionWrapperU4.bundle.meta

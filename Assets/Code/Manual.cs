@@ -6,29 +6,44 @@ using System.Collections;
 
 public class Manual : MonoBehaviour
 {
+    public GameObject GUI;
     public Text Page1;
     public Text Page2;
     public GameObject NextButton;
     public GameObject BackButton;
-    public string ManualPath="";
+    public string ManualPath = "";
 
     Transform trans;
     AudioSource audioSource;
+    Animation anim;
+    BoxCollider coll;
 
     List<string> pages;
     int currentPage;
 
     bool focused;
     Vector3 startPosition;
+    Quaternion startRotation;
     Vector3 focusPosition;
+    Quaternion focusRotation;
+    Vector3 colliderCenter;
+    Vector3 colliderSize;
 
     void Start()
     {
         trans = GetComponent<Transform>();
         audioSource = GetComponent<AudioSource>();
+        anim = GetComponent<Animation>();
+        coll = GetComponent<BoxCollider>();
+        colliderCenter = coll.center;
+        colliderSize = coll.size;
+
         startPosition = trans.position;
-        focusPosition = GameObject.Find("ManualFocus").GetComponent<Transform>().position;
-        if (ManualPath!="")
+        startRotation = trans.rotation;
+        Transform focusTarget = GameObject.Find("ManualFocus").GetComponent<Transform>();
+        focusPosition = focusTarget.position;
+        focusRotation = focusTarget.rotation;
+        if (ManualPath != "")
         {
             Populate(ManualPath);
         }
@@ -43,7 +58,7 @@ public class Manual : MonoBehaviour
         pages = new List<string>();
         foreach (FileInfo file in di.GetFiles("*.txt"))
         {
-            using (StreamReader sr=new StreamReader(file.FullName))
+            using (StreamReader sr = new StreamReader(file.FullName))
             {
                 pages.Add(sr.ReadToEnd());
             }
@@ -74,6 +89,8 @@ public class Manual : MonoBehaviour
     }
     public void OnNextClicked()
     {
+        Page1.text = "";
+        Page2.text = "";
         audioSource.Play();
         currentPage += 2;
         Page1.text = pages[currentPage];
@@ -81,17 +98,19 @@ public class Manual : MonoBehaviour
         {
             Page2.text = pages[currentPage + 1];
         }
-        if (currentPage < pages.Count - 1)
+        if (currentPage > pages.Count - 1)
         {
             NextButton.SetActive(false);
         }
-        if (currentPage >0)
+        if (currentPage > 0)
         {
             BackButton.SetActive(true);
         }
     }
     public void OnBackClicked()
     {
+        Page1.text = "";
+        Page2.text = "";
         audioSource.Play();
         currentPage -= 2;
         Page1.text = pages[currentPage];
@@ -112,21 +131,40 @@ public class Manual : MonoBehaviour
     {
         if (focused)
         {
-            StartCoroutine(MoveCamera(startPosition));
+            anim.Play("Close");
+            GUI.SetActive(false);
+            coll.center = colliderCenter;
+            coll.size = colliderSize;
+            StartCoroutine(MoveManual(startPosition, startRotation));
         }
         else
         {
-            StartCoroutine(MoveCamera(focusPosition));
+            anim.Play("Open");
+            StartCoroutine(MoveManual(focusPosition, focusRotation));
+            StartCoroutine(ShowGUI());
         }
     }
-    IEnumerator MoveCamera(Vector3 target)
+    IEnumerator MoveManual(Vector3 target, Quaternion rotation)
     {
-        Vector3 startPosition = trans.position;
+        Vector3 sPosition = trans.position;
+        Quaternion sRotation = trans.rotation;
         for (int i = 0; i < 50; i++)
         {
-            trans.position = Vector3.Lerp(startPosition, target, i / 50f);
+            trans.position = Vector3.Lerp(sPosition, target, i / 50f);
+            trans.rotation = Quaternion.Lerp(sRotation, rotation, i / 50f);
             yield return null;
         }
         focused = !focused;
+    }
+    IEnumerator ShowGUI()
+    {
+        while (anim.isPlaying)
+        {
+            yield return null;
+        }
+        GUI.SetActive(true);
+
+        coll.center = new Vector3(colliderCenter.x+colliderSize.x/2, colliderCenter.y-colliderSize.y/2, colliderCenter.z);
+        coll.size = new Vector3(colliderSize.x*2,colliderSize.y/2,colliderSize.z);
     }
 }
