@@ -14,8 +14,6 @@ public class StealPasswordChecker : SolutionChecker
             {
                 using (StreamReader answerReader=new StreamReader(Application.dataPath+"/StreamingAssets/MissionDocuments/StealPassword/PasswordFile.txt"))
                 {
-                    Debug.Log(sr.ReadToEnd());
-                    Debug.Log(answerReader.ReadToEnd());
                     if (sr.ReadToEnd()==answerReader.ReadToEnd())
                     {
                         return true;

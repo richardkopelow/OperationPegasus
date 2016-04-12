@@ -1,4 +1,4 @@
-<size=30><b>Mission 3</b></size>
+<size=30><b>Math Operations</b></size>
 We are having you continue working on the MathOps class.
 
 Create the functions detailed on the next page.

@@ -1,4 +1,4 @@
-﻿<size=30><b>Mission 2</b></size>
+﻿<size=30><b>Factorial</b></size>
 It would seem that you are more competent than No. 4353. This is expected to continue.
 
 At Pegasus we need factorials. These are important for research. We need you to finish a piece of code that calculates factorials.
