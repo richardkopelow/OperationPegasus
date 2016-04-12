@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Reflection;
 
-public class Mission1Checker : SolutionChecker
+public class FactorialChecker : SolutionChecker
 {
     public override bool CheckAnswer(Assembly program)
     {

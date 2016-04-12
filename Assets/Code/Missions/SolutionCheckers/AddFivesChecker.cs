@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 
-public class Mission0Checker : SolutionChecker
+public class AddFivesChecker : SolutionChecker
 {
     public override bool CheckAnswer(Assembly program)
     {

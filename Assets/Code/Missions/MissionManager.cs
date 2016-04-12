@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 public class MissionManager:MonoBehaviour
 {
@@ -44,19 +45,37 @@ public class MissionManager:MonoBehaviour
         Missions = new Dictionary<string, Mission>();
 
         Mission addFives = new Mission("AddFives");
-        addFives.Checker = new Mission0Checker();
+        addFives.Checker = new AddFivesChecker();
         addFives.NextMissions.Add("Factorial");
         Missions.Add(addFives.Name, addFives);
 
         Mission factorial = new Mission("Factorial");
-        factorial.Checker = new Mission1Checker();
+        factorial.Checker = new FactorialChecker();
         factorial.NextMissions.Add("MathOps");
+        factorial.NextMissions.Add("StealPassword");
         Missions.Add(factorial.Name, factorial);
 
         Mission mis2 = new Mission("MathOps");
-        mis2.Checker = new Mission2Checker();
+        mis2.Checker = new MathOpsChecker();
         mis2.NextMissions.Add("");
         Missions.Add(mis2.Name, mis2);
+
+        Mission stealPassword = new Mission("StealPassword");
+        stealPassword.Checker = new StealPasswordChecker();
+        stealPassword.NeedsManual = false;
+        stealPassword.SpecialSetup = () =>
+        {
+            PlayerPrefs.SetInt("UnlockedT",1);
+
+            Process process = new Process();
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/c subst T: " + Application.dataPath + "/StreamingAssets/drives/t";
+            process.StartInfo = startInfo;
+            process.Start();
+        };
+        Missions.Add(stealPassword.Name, stealPassword);
         #endregion
 
         string missionsString = PlayerPrefs.GetString("CurrentMissions");
@@ -88,7 +107,14 @@ public class MissionManager:MonoBehaviour
         List<Mission> missionsCompeted = new List<Mission>();
         foreach (Mission mission in CurrentMissions)
         {
-            bool win = mission.Checker.CheckAnswer(assembly);
+            bool win = false;
+            try
+            {
+                win = mission.Checker.CheckAnswer(assembly);
+            }
+            catch
+            {
+            }
             if (win)
             {
                 audioSource.clip = BeepAudio;
@@ -193,13 +219,16 @@ public class MissionManager:MonoBehaviour
                 DirectoryInfo qDi = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + mission.Name+"/q");
                 if (qDi.Exists)
                 {
-                    Debug.Log("found q");
                     copyMissionFiles("Q:",qDi);
                 }
                 DirectoryInfo tDi = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + mission.Name + "/t");
                 if (tDi.Exists)
                 {
                     copyMissionFiles("T:", tDi);
+                }
+                if (mission.SpecialSetup!=null)
+                {
+                    mission.SpecialSetup();
                 }
                 mission.Started = true;
             }
@@ -219,7 +248,6 @@ public class MissionManager:MonoBehaviour
             {
                 try
                 {
-                    Debug.Log("copy file "+fi.FullName+" to "+ path + "/" + fi.Name);
                     fi.CopyTo(path+"/" + fi.Name);
                 }
                 catch

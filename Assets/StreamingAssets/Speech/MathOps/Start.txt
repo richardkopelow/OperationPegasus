@@ -1,0 +1,1 @@
+white~As it turns out some of the other workers do not posses adequate mathematic skill. Implement the functionality described in the manual.

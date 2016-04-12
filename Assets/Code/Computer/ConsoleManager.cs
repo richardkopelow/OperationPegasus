@@ -17,21 +17,30 @@ public class ConsoleManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        ProcessStartInfo cmdStartInfo = new ProcessStartInfo("cmd.exe","/K");
-        cmdStartInfo.CreateNoWindow = true;
-        cmdStartInfo.UseShellExecute = false;
-        cmdStartInfo.RedirectStandardInput = true;
-        cmdStartInfo.RedirectStandardOutput = true;
-        cmdProcess = Process.Start(cmdStartInfo);
-        cmdProcess.StandardInput.WriteLine();
-
         //Setup environment
         DirectoryInfo qDriveFolder = new DirectoryInfo(Application.dataPath + "/StreamingAssets/drives/q");
         if (!qDriveFolder.Exists)
         {
             qDriveFolder.Create();
         }
+        DirectoryInfo tDriveFolder = new DirectoryInfo(Application.dataPath + "/StreamingAssets/drives/t");
+        if (!tDriveFolder.Exists)
+        {
+            tDriveFolder.Create();
+        }
+
+        ProcessStartInfo cmdStartInfo = new ProcessStartInfo("cmd.exe", "/K");
+        cmdStartInfo.CreateNoWindow = true;
+        cmdStartInfo.UseShellExecute = false;
+        cmdStartInfo.RedirectStandardInput = true;
+        cmdStartInfo.RedirectStandardOutput = true;
+        cmdProcess = Process.Start(cmdStartInfo);
+        cmdProcess.StandardInput.WriteLine();
         cmdProcess.StandardInput.WriteLine("subst Q: " + qDriveFolder.FullName);
+        if (PlayerPrefs.GetInt("UnlockedT") == 1)
+        {
+            cmdProcess.StandardInput.WriteLine("subst T: " + tDriveFolder.FullName);
+        }
         cmdProcess.StandardInput.WriteLine("Q:");
 
 
@@ -75,11 +84,6 @@ public class ConsoleManager : MonoBehaviour
             Input.text = "";
         }
     }
-    void OnApplicationQuit()
-    {
-        cmdProcess.StandardInput.WriteLine("subst Q: /d");
-        cmdProcess.Kill();
-    }
     public void Write(string text)
     {
         outputText += text;
@@ -91,5 +95,26 @@ public class ConsoleManager : MonoBehaviour
     public void NewPrompt()
     {
         cmdProcess.StandardInput.WriteLine();
+    }
+    void OnApplicationQuit()
+    {
+        Process process = new Process();
+        ProcessStartInfo startInfo = new ProcessStartInfo();
+        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        startInfo.FileName = "cmd.exe";
+        startInfo.Arguments = "/c subst Q: /d";
+        process.StartInfo = startInfo;
+        process.Start();
+
+        process = new Process();
+        startInfo = new ProcessStartInfo();
+        startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        startInfo.FileName = "cmd.exe";
+        startInfo.Arguments = "/c subst T: /d";
+        process.StartInfo = startInfo;
+        process.Start();
+
+        //cmdProcess.StandardInput.WriteLine("subst Q: /d");
+        cmdProcess.Kill();
     }
 }

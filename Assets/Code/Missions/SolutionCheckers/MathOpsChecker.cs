@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-public class Mission2Checker : SolutionChecker
+public class MathOpsChecker : SolutionChecker
 {
     public override bool CheckAnswer(Assembly program)
     {
@@ -52,7 +52,7 @@ public class Mission2Checker : SolutionChecker
                 result = false;
             }
         }
-        bool prime2 = (bool)method.Invoke(adder, new object[] { -4 });
+        bool prime2 = (bool)method3.Invoke(adder, new object[] { -4 });
         if (prime2)
         {
             result = false;
