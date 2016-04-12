@@ -1,16 +1,7 @@
-﻿<size=30><b>File</b></size>
+<size=30><b>Console</b></size>
 
-public File(string path);
-<i>creates an object for interacting with files.</i>
+public static void Write(string text);
+<i>Prints text into the console.</i>
 
-public string Read();
-<i>Returns the contents of the file as a string.</i>
-
-public void Write(string text);
-<i>overwrites the contents of the file with text.</i>
-
-public void WriteLine(string text);
-<i>Appends text to the contents of the file and makes a new line.</i>
-
-public void Delete();
-<i>Deletes the file.</i>
+public static void WriteLine(string text);
+<i>Prints text into the console and adds a new line.</i>

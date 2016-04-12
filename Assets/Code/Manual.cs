@@ -11,7 +11,7 @@ public class Manual : MonoBehaviour
     public Text Page2;
     public GameObject NextButton;
     public GameObject BackButton;
-    public string ManualPath = "";
+    public string[] ManualPaths;
 
     Transform trans;
     AudioSource audioSource;
@@ -43,24 +43,27 @@ public class Manual : MonoBehaviour
         Transform focusTarget = GameObject.Find("ManualFocus").GetComponent<Transform>();
         focusPosition = focusTarget.position;
         focusRotation = focusTarget.rotation;
-        if (ManualPath != "")
+        if (ManualPaths.Length>0)
         {
-            Populate(ManualPath);
+            Populate(ManualPaths);
         }
     }
 
-    public void Populate(string manualPath)
+    public void Populate(string[] manualPaths)
     {
         Page1.text = "";
         Page2.text = "";
 
-        DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/StreamingAssets/Manuals/" + manualPath);
         pages = new List<string>();
-        foreach (FileInfo file in di.GetFiles("*.txt"))
+        foreach (string path in manualPaths)
         {
-            using (StreamReader sr = new StreamReader(file.FullName))
+            DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/StreamingAssets/Manuals/" + path);
+            foreach (FileInfo file in di.GetFiles("*.txt"))
             {
-                pages.Add(sr.ReadToEnd());
+                using (StreamReader sr = new StreamReader(file.FullName))
+                {
+                    pages.Add(sr.ReadToEnd());
+                }
             }
         }
 
@@ -98,7 +101,7 @@ public class Manual : MonoBehaviour
         {
             Page2.text = pages[currentPage + 1];
         }
-        if (currentPage > pages.Count - 1)
+        if (currentPage >= pages.Count - 1)
         {
             NextButton.SetActive(false);
         }

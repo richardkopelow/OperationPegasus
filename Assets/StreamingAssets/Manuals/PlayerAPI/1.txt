@@ -1,7 +1,2 @@
-<size=30><b>Console</b></size>
-
-public static void Write(string text);
-<i>Prints text into the console.</i>
-
-public static void WriteLine(string text);
-<i>Prints text into the console and adds a new line.</i>
+﻿<size=20><b>Standard API</b></size>
+The rest of this manual describes Classes in the Standard namespace. This API handles all interactions that you need with lower level systems.

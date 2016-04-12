@@ -5,6 +5,8 @@ public class TitleScreen : MonoBehaviour
 {
     public Transform LeftDoor;
     public Transform RightDoor;
+    public Transform CamTransform;
+    public Transform CamHome;
     public GameObject Holder;
     public MissionManager MissionMan;
 
@@ -14,10 +16,11 @@ public class TitleScreen : MonoBehaviour
     }
     IEnumerator enterGame()
     {
-        Vector3 leftStart = new Vector3(-250,239, -348);
-        Vector3 leftEnd = leftStart + 600*Vector3.left;
-        Vector3 rightStart = new Vector3(250, 239, -348);
-        Vector3 rightEnd = rightStart + -600 * Vector3.left;
+        Vector3 leftStart = LeftDoor.position;
+        Vector3 leftEnd = leftStart + 15*Vector3.left;
+        Vector3 rightStart = RightDoor.position;
+        Vector3 rightEnd = rightStart + -15 * Vector3.left;
+        Vector3 camStart = CamTransform.position;
 
         Holder.SetActive(false);
 
@@ -31,6 +34,11 @@ public class TitleScreen : MonoBehaviour
             yield return null;
         }
         yield return new WaitForSeconds(1);
+        for (int i = 0; i < 50; i++)
+        {
+            CamTransform.position = Vector3.Lerp(camStart, CamHome.position, i / 50f);
+            yield return null;
+        }
         MissionMan.SetupMission();
     }
 }

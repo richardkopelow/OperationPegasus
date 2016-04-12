@@ -171,6 +171,7 @@ public class MissionManager:MonoBehaviour
     }
     IEnumerator setupMission()
     {
+        List<string> manuals = new List<string>();
         foreach (Mission mission in CurrentMissions)
         {
             if (!mission.Started)
@@ -186,30 +187,46 @@ public class MissionManager:MonoBehaviour
 
                 if (mission.NeedsManual)
                 {
-                    missionManual.Populate("missions/" + mission.Name);
+                    manuals.Add("missions/" + mission.Name);
                 }
 
-                DirectoryInfo di = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + mission.Name);
-                if (di.Exists)
+                DirectoryInfo qDi = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + mission.Name+"/q");
+                if (qDi.Exists)
                 {
-                    foreach (FileInfo fi in di.GetFiles())
-                    {
-                        if (!fi.Extension.Contains("meta"))
-                        {
-                            try
-                            {
-                                fi.CopyTo(Application.dataPath + "/StreamingAssets/Drives/Q/Documents/" + fi.Name);
-                            }
-                            catch
-                            {
-                            }
-                        }
-                    }
+                    Debug.Log("found q");
+                    copyMissionFiles("Q:",qDi);
+                }
+                DirectoryInfo tDi = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + mission.Name + "/t");
+                if (tDi.Exists)
+                {
+                    copyMissionFiles("T:", tDi);
                 }
                 mission.Started = true;
             }
         }
+        missionManual.Populate(manuals.ToArray());
         yield return StartCoroutine(runPneumatic());
+    }
+    void copyMissionFiles(string path, DirectoryInfo di)
+    {
+        foreach (DirectoryInfo subDi in di.GetDirectories())
+        {
+            copyMissionFiles(path + "/" + subDi.Name,subDi);
+        }
+        foreach (FileInfo fi in di.GetFiles())
+        {
+            if (!fi.Extension.Contains("meta"))
+            {
+                try
+                {
+                    Debug.Log("copy file "+fi.FullName+" to "+ path + "/" + fi.Name);
+                    fi.CopyTo(path+"/" + fi.Name);
+                }
+                catch
+                {
+                }
+            }
+        }
     }
     IEnumerator runPneumatic()
     {
