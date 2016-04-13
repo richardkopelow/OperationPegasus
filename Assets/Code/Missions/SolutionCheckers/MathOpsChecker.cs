@@ -39,9 +39,9 @@ public class MathOpsChecker : SolutionChecker
             bool prime = (bool)method3.Invoke(adder, new object[] { number3 });
 
             bool isPrime = true;
-            for (int j = 2; j < number; j++)
+            for (int j = 2; j < number3; j++)
             {
-                if (number % j == 0)
+                if (number3 % j == 0)
                 {
                     isPrime = false;
                 }

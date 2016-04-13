@@ -118,6 +118,7 @@ public class CodeEditorManager : MonoBehaviour
     }
     Assembly Compile()
     {
+        OnSaveClicked();
         Dictionary<string, string> providerOptions = new Dictionary<string, string>
                 {
                     {"CompilerVersion", "v2.0"}
@@ -136,14 +137,11 @@ public class CodeEditorManager : MonoBehaviour
 
         if (results.Errors.Count > 0)
         {
-            Debug.Log("errors");
-            Console.Write("\n");
             foreach (CompilerError error in results.Errors)
             {
                 Debug.Log(error);
                 Console.WriteLine(string.Format("Line {0} - {1}",error.Line,error.ErrorText));
             }
-            Debug.Log("end errors");
         }
 
         return results.CompiledAssembly;

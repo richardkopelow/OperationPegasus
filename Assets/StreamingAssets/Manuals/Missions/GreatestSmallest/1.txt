@@ -1,0 +1,8 @@
+<size=30><b>Greatest Smallest</b></size>
+Populate the Smallest and Greatest functions in the GreatestSmallest class.
+
+public int Greatest(int x, int y, int n);
+<i>Greatest return the greatest number below n that is evenly divisible by both x and y.</i>
+
+public int Smallest(int x, int y, int n);
+<i>Smallest return the smallest number above n that is evenly divisible by both x and y.</i>

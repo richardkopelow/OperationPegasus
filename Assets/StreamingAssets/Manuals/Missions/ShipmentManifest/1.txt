@@ -1,0 +1,10 @@
+<size=30><b>Shipment Manifest</b></size>
+Operation Pegasus ships and receives many products. Build the described classes. These are used to load and store shipment data for the organization.
+
+<b>public class Product</b>
+public string Name {get;set;}
+public float Price {get;set;}
+public float Weight {get;set;}
+public float SizeX {get;set;}
+public float SizeY {get;set;}
+public float SizeZ {get;set;}

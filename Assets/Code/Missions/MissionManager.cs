@@ -57,7 +57,7 @@ public class MissionManager:MonoBehaviour
 
         Mission mis2 = new Mission("MathOps");
         mis2.Checker = new MathOpsChecker();
-        mis2.NextMissions.Add("");
+        mis2.NextMissions.Add("GreatestSmallest");
         Missions.Add(mis2.Name, mis2);
 
         Mission stealPassword = new Mission("StealPassword");
@@ -75,10 +75,26 @@ public class MissionManager:MonoBehaviour
             process.StartInfo = startInfo;
             process.Start();
         };
+        stealPassword.NextMissions.Add("ShipmentManifest");
+        stealPassword.NextMissions.Add("ShipmentManifestHack");
         Missions.Add(stealPassword.Name, stealPassword);
+
+        Mission greatestSmallest = new Mission("GreatestSmallest");
+        greatestSmallest.Checker = new GreatestSmallestChecker();
+        Missions.Add(greatestSmallest.Name, greatestSmallest);
+
+        Mission shipmentManifest = new Mission("ShipmentManifest");
+        shipmentManifest.Checker = new ShipmentManifestChecker();
+        Missions.Add(shipmentManifest.Name, shipmentManifest);
+
+        Mission shipmentManifestHack = new Mission("ShipmentManifestHack");
+        shipmentManifestHack.Checker = new ShipmentManifestHackChecker();
+        shipmentManifestHack.NeedsManual = false;
+        Missions.Add(shipmentManifestHack.Name, shipmentManifestHack);
         #endregion
 
         string missionsString = PlayerPrefs.GetString("CurrentMissions");
+        UnityEngine.Debug.Log(missionsString);
         if (missionsString=="")
         {
             missionsString = "AddFives";
@@ -211,11 +227,6 @@ public class MissionManager:MonoBehaviour
                 }
                 yield return StartCoroutine(runSpeechScript(mission.Name, true));
 
-                if (mission.NeedsManual)
-                {
-                    manuals.Add("missions/" + mission.Name);
-                }
-
                 DirectoryInfo qDi = new DirectoryInfo(Application.dataPath + "/StreamingAssets/MissionDocuments/" + mission.Name+"/q");
                 if (qDi.Exists)
                 {
@@ -231,6 +242,11 @@ public class MissionManager:MonoBehaviour
                     mission.SpecialSetup();
                 }
                 mission.Started = true;
+            }
+
+            if (mission.NeedsManual)
+            {
+                manuals.Add("missions/" + mission.Name);
             }
         }
         missionManual.Populate(manuals.ToArray());
