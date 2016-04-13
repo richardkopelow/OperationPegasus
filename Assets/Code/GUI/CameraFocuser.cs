@@ -6,12 +6,17 @@ public class CameraFocuser : MonoBehaviour
     public Transform Home;
     public Transform Target;
     public Transform Camera;
-    public bool Toggle = true;
-    bool atTarget;
 
+    public bool AtTarget;
+    public bool Toggle = true;
+
+    public void SetAtTarget(bool val)
+    {
+        AtTarget = val;
+    }
     public void OnClick()
     {
-        if (atTarget)
+        if (AtTarget)
         {
             StartCoroutine(MoveCamera(Home.position));
         }
@@ -30,7 +35,7 @@ public class CameraFocuser : MonoBehaviour
         }
         if (Toggle)
         {
-            atTarget = !atTarget;
+            AtTarget = !AtTarget;
         }
     }
 }

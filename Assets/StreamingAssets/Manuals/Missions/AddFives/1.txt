@@ -3,6 +3,8 @@ This is Operation Pegasus.
 
 You are one of our new programmers. Your predecessor was unable to produce satisfactory results. This will result in termination. At Pegasus we do what me must because we do.
 
+You will be writing code in C#.
+
 We expect good work from you.
 
 Your first assignment begins on the next page.

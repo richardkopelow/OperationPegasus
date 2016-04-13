@@ -3,3 +3,8 @@ white~Pegasus is an extra gamma security level facility. Here we do research and
 white~You will be delivered assignments in the form of manuals. You will read the delivered manual and you will accomplish the task outlined within the manual.
 white~These jobs MUST be completed effectively and without alternate purpose.
 white~At Pegasus we do what we must because we do.
+white~Let me give you a rundown of your work space.
+white~Click on a manual to view its contents. Click it again to put it down;
+white~Click the gray square at the top right corner of a screen to focus on it. Click the square again to unfocus.
+white~The arrowed buttons on the screens switch focus to the other screen.
+white~The two manuals in your possession are the "Tasks" manual and the "API" manual. The Task manual will have descriptions of pending tasks, and the API manual has documentation for useful classes.
