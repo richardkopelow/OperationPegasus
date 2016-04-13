@@ -46,8 +46,13 @@ public class MissionManager:MonoBehaviour
 
         Mission addFives = new Mission("AddFives");
         addFives.Checker = new AddFivesChecker();
-        addFives.NextMissions.Add("Factorial");
+        addFives.NextMissions.Add("BrokenFor");
         Missions.Add(addFives.Name, addFives);
+
+        Mission brokenFor = new Mission("BrokenFor");
+        brokenFor.Checker = new BrokenForChecker();
+        brokenFor.NextMissions.Add("Factorial");
+        Missions.Add(brokenFor.Name, brokenFor);
 
         Mission factorial = new Mission("Factorial");
         factorial.Checker = new FactorialChecker();

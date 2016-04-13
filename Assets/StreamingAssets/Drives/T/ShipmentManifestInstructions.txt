@@ -1,3 +1,0 @@
-They are having you write this code for the shipping manifests because I deleted the old system.
-I need you to add to the manifest builder to so that it it will write the manifest text to files.
-Save the file with the manifestName.txt under the folder Manifests.

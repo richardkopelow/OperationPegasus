@@ -96,6 +96,10 @@ public class ConsoleManager : MonoBehaviour
     {
         cmdProcess.StandardInput.WriteLine();
     }
+    public void FocusInput()
+    {
+        Input.Select();
+    }
     void OnApplicationQuit()
     {
         Process process = new Process();

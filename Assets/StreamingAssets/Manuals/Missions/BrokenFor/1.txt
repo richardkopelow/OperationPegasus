@@ -1,0 +1,2 @@
+<size=30><b>Broken For</b></size>
+This is a training mission. It should not be difficult though you will see some more complicated programming structures. Check the file BrokenFor.cs in your Documents folder.

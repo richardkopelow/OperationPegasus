@@ -6,7 +6,7 @@ public class CameraFocuser : MonoBehaviour
     public Transform Home;
     public Transform Target;
     public Transform Camera;
-
+    public bool Toggle = true;
     bool atTarget;
 
     public void OnClick()
@@ -28,6 +28,9 @@ public class CameraFocuser : MonoBehaviour
             Camera.position = Vector3.Lerp(startPosition, target, i / 50f);
             yield return null;
         }
-        atTarget = !atTarget;
+        if (Toggle)
+        {
+            atTarget = !atTarget;
+        }
     }
 }
