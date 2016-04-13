@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: e9ddf0535ba163848a5c352403b1e2d3
-timeCreated: 1460422227
+timeCreated: 1460523084
 licenseType: Free
 SubstanceImporter:
   serializedVersion: 5
@@ -61,6 +61,13 @@ SubstanceImporter:
             offset: {x: 0, y: 0}
         data:
           first:
+            name: _MetallicGlossMap
+          second:
+            texture: {instanceID: 0}
+            scale: {x: 1, y: 1}
+            offset: {x: 0, y: 0}
+        data:
+          first:
             name: _ParallaxMap
           second:
             texture: {instanceID: 0}
@@ -94,13 +101,6 @@ SubstanceImporter:
             texture: {instanceID: 0}
             scale: {x: 1, y: 1}
             offset: {x: 0, y: 0}
-        data:
-          first:
-            name: _MetallicGlossMap
-          second:
-            texture: {instanceID: 0}
-            scale: {x: 1, y: 1}
-            offset: {x: 0, y: 0}
       floats:
         data:
           first:
@@ -116,10 +116,6 @@ SubstanceImporter:
           second: 0.5
         data:
           first:
-            name: _Parallax
-          second: 0.02
-        data:
-          first:
             name: _ZWrite
           second: 1
         data:
@@ -128,8 +124,16 @@ SubstanceImporter:
           second: 0.5
         data:
           first:
+            name: _Metallic
+          second: 0
+        data:
+          first:
             name: _BumpScale
           second: 1
+        data:
+          first:
+            name: _Parallax
+          second: 0.02
         data:
           first:
             name: _OcclusionStrength
@@ -145,10 +149,6 @@ SubstanceImporter:
         data:
           first:
             name: _Mode
-          second: 0
-        data:
-          first:
-            name: _Metallic
           second: 0
       colors:
         data:
@@ -191,8 +191,8 @@ SubstanceImporter:
     buildTargetSettings:
     - serializedVersion: 2
       buildTarget: 
-      textureWidth: 1024
-      textureHeight: 1024
+      textureWidth: 2048
+      textureHeight: 2048
       textureFormat: 0
       loadingBehavior: 1
   deletedPrototypes: []
