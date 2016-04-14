@@ -1,0 +1,2 @@
+<size=30><b>Product</b></size>
+Look in your documents for a code file called Multiplier.cs. Complete the body of the Product function. It takes two floats and return the product of them.

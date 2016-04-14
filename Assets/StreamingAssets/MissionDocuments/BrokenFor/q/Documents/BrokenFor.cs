@@ -7,7 +7,10 @@ public class BrokenFor
         int result = 0;
         for (int i = 0; i < number; i++
         {
-            result += i;
+            if(i%2==0)//checks if i is even
+            {
+                result += i;
+            }
         }
         return result;
     }

@@ -2372,14 +2372,9 @@ MonoBehaviour:
     Richard Kopelow
 
 
-    Sounds:
+    Sounds and Fonts:
 
-    See SoundCredit file in install directory
-
-
-    Fonts:
-
-    See FontCredit file in install directory'
+    See credit files under StreamingAssets in the install''s data folder'
 --- !u!222 &573500557
 CanvasRenderer:
   m_ObjectHideFlags: 0

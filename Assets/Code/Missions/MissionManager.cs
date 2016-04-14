@@ -31,7 +31,6 @@ public class MissionManager:MonoBehaviour
     public Dictionary<string, Mission> Missions { get; set; }
 
     AudioSource audioSource;
-    Transform missionManualTrans;
     Manual missionManual;
 
     bool speechClicked=false;
@@ -52,8 +51,13 @@ public class MissionManager:MonoBehaviour
 
         Mission brokenFor = new Mission("BrokenFor");
         brokenFor.Checker = new BrokenForChecker();
-        brokenFor.NextMissions.Add("Factorial");
+        brokenFor.NextMissions.Add("Product");
         Missions.Add(brokenFor.Name, brokenFor);
+
+        Mission product = new Mission("Product");
+        product.Checker = new ProductChecker();
+        product.NextMissions.Add("Factorial");
+        Missions.Add(product.Name, product);
 
         Mission factorial = new Mission("Factorial");
         factorial.Checker = new FactorialChecker();
@@ -112,7 +116,6 @@ public class MissionManager:MonoBehaviour
         }
 
         GameObject manualGO = GameObject.Find("MissionManual");
-        missionManualTrans = manualGO.GetComponent<Transform>();
         missionManual = manualGO.GetComponent<Manual>();
     }
     void LateUpdate()

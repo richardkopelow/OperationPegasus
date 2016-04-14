@@ -8,3 +8,4 @@ white~Click on a manual to view its contents. Click it again to put it down;
 white~Click the gray square at the top right corner of a screen to focus on it. Click the square again to unfocus.
 white~The arrowed buttons on the screens switch focus to the other screen.
 white~The two manuals in your possession are the "Tasks" manual and the "API" manual. The Task manual will have descriptions of pending tasks, and the API manual has documentation for useful classes.
+white~The command prompt will be mostly helpful to look through the file system to find files. Use the coding terminal to open and edit files as well as test and submit code.
