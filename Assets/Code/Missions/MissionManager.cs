@@ -12,6 +12,7 @@ using System.Diagnostics;
 public class MissionManager:MonoBehaviour
 {
     public GameObject SpeechBox;
+    public Transform TubeDoor;
     public Text SpeechText;
     public AudioClip TeletypeAudio;
     public AudioClip BeepAudio;
@@ -279,26 +280,26 @@ public class MissionManager:MonoBehaviour
     }
     IEnumerator runPneumatic()
     {
+        Vector3 start = TubeDoor.position;
+        Vector3 end = start + -3.1f * Vector3.up;
+
+        for (int i = 0; i < 40; i++)
+        {
+            TubeDoor.position = Vector3.Lerp(start, end, i / 40f);
+            yield return null;
+        }
+
         audioSource.clip = PneumaticAudio;
         audioSource.loop = false;
         audioSource.Play();
-        Vector3 start = missionManualTrans.position;
-        Vector3 end = start + 5*Vector3.up;
-        /*
+        yield return new WaitForSeconds(4);
+
         for (int i = 0; i < 40; i++)
         {
-            missionManualTrans.position = Vector3.Lerp(start, end, i / 40f);
+            TubeDoor.position = Vector3.Lerp(end, start, i / 40f);
             yield return null;
         }
-        */
-        yield return new WaitForSeconds(2);
-        /*
-        for (int i = 0; i < 40; i++)
-        {
-            missionManualTrans.position = Vector3.Lerp(end, start, i / 40f);
-            yield return null;
-        }
-        */
+
     }
 
     public void OnSpeechClicked()

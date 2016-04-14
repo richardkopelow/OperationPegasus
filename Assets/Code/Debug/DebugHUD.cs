@@ -6,6 +6,13 @@ public class DebugHUD : MonoBehaviour
 {
     public InputField MissionNumberField;
 
+    void Start()
+    {
+        #if !DEBUG
+        gameObject.SetActive(false);
+        #endif
+    }
+
     public void OnClearDataClick()
     {
         PlayerPrefs.DeleteAll();
