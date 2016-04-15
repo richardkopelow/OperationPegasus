@@ -46,7 +46,7 @@ public class ConsoleManager : MonoBehaviour
 
         outputUpdater = new Thread(ReadConsole);
         outputUpdater.Start();
-        Thread.Sleep(200);
+        Thread.Sleep(400);
         outputText = "";
         cmdProcess.StandardInput.WriteLine();
     }
@@ -80,6 +80,10 @@ public class ConsoleManager : MonoBehaviour
     {
         if (text.Contains("\n"))
         {
+            if (text.Remove(text.Length - 1) == "clear")
+            {
+                outputText = "";
+            }
             cmdProcess.StandardInput.Write(text);
             Input.text = "";
         }
