@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.IO;
-using Microsoft.CSharp;
+using Modified.CSharp;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Collections.Specialized;
@@ -123,7 +123,8 @@ public class CodeEditorManager : MonoBehaviour
                 {
                     {"CompilerVersion", "v2.0"}
                 };
-        CSharpCodeProvider provider = new CSharpCodeProvider(providerOptions);
+        UnityCSharpCodeProvider provider = new UnityCSharpCodeProvider(providerOptions);
+        
 
         CompilerParameters compilerParams = new CompilerParameters();
         compilerParams.GenerateInMemory = true;

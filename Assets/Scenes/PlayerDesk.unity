@@ -319,7 +319,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 44698196}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.18, z: -6.34}
+  m_LocalPosition: {x: 0, y: 2.18, z: -7.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2506,7 +2506,7 @@ MonoBehaviour:
 
     Sounds and Fonts:
 
-    See credit files under StreamingAssets in the install''s data folder'
+    See credit files in the install folder'
 --- !u!222 &573500557
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6426,7 +6426,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1931971418}
   m_LocalRotation: {x: -0.000000115202326, y: 0.7071067, z: -0.7071068, w: -0.00000011520231}
-  m_LocalPosition: {x: 0, y: 2.18, z: -5.3}
+  m_LocalPosition: {x: 0, y: 2.18, z: -5.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
